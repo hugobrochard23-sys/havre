@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#216069">
+<title>Havre</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:#216069;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#fff;user-select:none;-webkit-user-select:none}
+#c{position:fixed;inset:0;width:100%;height:100%;touch-action:none;display:block}
+button{font:inherit;color:inherit;border:0;cursor:pointer}
+.bar{position:fixed;left:0;right:0;display:flex;align-items:center;gap:8px;padding:10px 12px;pointer-events:none}
+.bar>*{pointer-events:auto}
+.top{top:env(safe-area-inset-top,0)}
+.bottom{bottom:env(safe-area-inset-bottom,0);padding-bottom:12px}
+.sp{flex:1}
+.btn{height:44px;min-width:44px;padding:0 14px;border-radius:22px;background:rgba(10,45,55,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:15px}
+.btn:disabled{opacity:.35}
+.btn.on{background:#e2433d}
+.btn small{opacity:.7;font-size:12px}
+#palette{display:flex;gap:8px;overflow-x:auto;padding:6px 4px;flex:1;scrollbar-width:none}
+#palette::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;width:40px;height:40px;border-radius:50%;border:3px solid rgba(255,255,255,.35)}
+.chip.sel{border-color:#fff;transform:scale(1.15)}
+#hint{position:fixed;left:50%;top:18%;transform:translateX(-50%);padding:10px 16px;border-radius:16px;background:rgba(10,45,55,.6);font-size:14px;text-align:center;pointer-events:none;transition:opacity .6s;max-width:86vw}
+#hint.gone{opacity:0}
+#panel{position:fixed;top:0;right:0;bottom:0;width:min(320px,86vw);background:rgba(12,44,54,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:calc(16px + env(safe-area-inset-top,0)) 16px 16px;transform:translateX(100%);transition:transform .25s;overflow:auto}
+body.open #panel{transform:none}
+#panel h2{margin:0 0 14px;font-size:18px;display:flex;justify-content:space-between;align-items:center}
+.row{display:flex;gap:8px;margin-bottom:10px;align-items:center}
+.row .btn{flex:1;border-radius:14px;background:rgba(255,255,255,.12)}
+.row .btn.on{background:#e2433d}
+.row .btn.dis{opacity:.35}
+.row input[type=range]{flex:1}
+.tip{font-size:13px;opacity:.75;line-height:1.5;margin-top:14px}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div class="bar top">
+  <button class="btn" id="undo" aria-label="Annuler">↶ <small id="undoN">0</small></button>
+  <button class="btn" id="redo" aria-label="Rétablir">↷</button>
+  <div class="sp"></div>
+  <button class="btn" id="mode" aria-label="Démolir">🔨</button>
+  <button class="btn" id="gear" aria-label="Réglages">⚙️</button>
+</div>
+
+<div id="hint">Touchez l'eau pour poser un quai, touchez un bloc pour le surélever.<br>Appui long : retirer · glisser : tourner · pincer : zoom</div>
+
+<div class="bar bottom"><div id="palette"></div></div>
+
+<aside id="panel" aria-hidden="true">
+  <h2>Havre <button class="btn" id="close" aria-label="Fermer">✕</button></h2>
+  <div class="row"><button class="btn" id="pUndo">↶ Annuler <small id="pUndoN">–</small></button><button class="btn" id="pRedo">↷ Rétablir <small id="pRedoN">–</small></button></div>
+  <div class="row"><button class="btn" id="tMode">🔨 Démolir</button><button class="btn" id="tGrid">▦ Grille</button></div>
+  <div class="row"><button class="btn" id="rotL">⟲</button><button class="btn" id="rotR">⟳</button><button class="btn" id="zoomOut">−</button><button class="btn" id="zoomIn">+</button></div>
+  <div class="row"><button class="btn" id="camReset">Recentrer la vue</button></div>
+  <div class="row"><span id="volIco">🔊</span><input type="range" id="vol" min="0" max="1" step="0.05" value="0.6"></div>
+  <div class="row"><button class="btn" id="shot">📷 Capture</button><button class="btn" id="clear">🗑 Recommencer</button></div>
+  <p class="tip">Raccourcis : Ctrl/Cmd+Z annuler · G grille · X démolir · ←/→ tourner.</p>
+</aside>
+
+<script src="game.js"></script>
+</body>
+</html>
